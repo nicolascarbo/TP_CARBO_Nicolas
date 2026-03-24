@@ -1,18 +1,18 @@
 meta {
-  name: update a user
+  name: create users
   type: http
-  seq: 4
+  seq: 3
 }
 
-put {
-  url: http://localhost:3001/api/users/2/
+post {
+  url: http://localhost:3001/api/users
   body: json
   auth: inherit
 }
 
 body:json {
   {
-    "role": "admin"
+    "role": "user"
   }
 }
 
