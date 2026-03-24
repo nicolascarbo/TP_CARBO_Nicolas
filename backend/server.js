@@ -1,9 +1,13 @@
+import 'dotenv/config'
 import express from 'express'
 import usersRouter from './routes/users.js'
 import loggerMiddleware from './middleware/logger.js'
+import { connectDB } from './config/db.js'
 
 const app = express()
-const port = 3001
+const port = process.env.PORT || 3001
+
+connectDB()
 
 app.use(express.json())
 
