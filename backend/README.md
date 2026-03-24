@@ -86,7 +86,8 @@ Content-Type: application/json
 
 {
   "name": "No Role",
-  "email": "j@cole.com"
+  "email": "j@cole.com",
+  "role": "user"
 }
 ```
 

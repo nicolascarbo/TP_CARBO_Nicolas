@@ -42,6 +42,13 @@ router.post('/', (req, res) => {
     })
   }
 
+  if (users.some(u => u.email === email)) {
+    return res.status(409).json({
+      success: false,
+      message: 'Cet email est déjà utilisé'
+    })
+  }
+
   const newUser = {
     id: users[users.length - 1].id + 1,
     name,
@@ -69,6 +76,14 @@ router.put('/:id', (req, res) => {
   }
 
   const { id, createdAt, ...allowedUpdates } = req.body
+
+  if (allowedUpdates.email && users.some(u => u.email === allowedUpdates.email && u.id !== Number(req.params.id))) {
+    return res.status(409).json({
+      success: false,
+      message: 'Cet email est déjà utilisé'
+    })
+  }
+
   users[userIndex] = { ...users[userIndex], ...allowedUpdates }
 
   res.status(200).json({
