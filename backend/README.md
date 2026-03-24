@@ -73,7 +73,7 @@ GET http://localhost:3001/api/users
 
 **Résultat attendu :** Code `200 OK`, tableau de 3 utilisateurs (Hugo Tigre, Tommy Bonnes Pratiques, Simon l'échequier).
 
-![GET /api/users — 200 OK avec les 3 utilisateurs initiaux](./screenshots/get_users_200.png)
+![GET /api/users → vérifiez que les 3 utilisateurs initiaux sont retournés (code 200)](./screenshots/GET_200.png)
 
 ---
 
@@ -92,7 +92,7 @@ Content-Type: application/json
 
 **Résultat attendu :** Code `201 Created`, l'utilisateur créé est retourné avec son `id` (ici `4`). Notez cet `id` pour les étapes suivantes.
 
-> ℹ️ Pas de screenshot fourni pour cette étape — le résultat est visible à l'étape 3.
+![POST /api/users → créez un nouvel utilisateur, notez l'id retourné (code 201)](./screenshots/POST_201.png)
 
 ---
 
@@ -105,7 +105,7 @@ GET http://localhost:3001/api/users/4
 
 **Résultat attendu :** Code `200 OK`, retourne l'utilisateur avec l'`id: 4`.
 
-![GET /api/users/4 — 200 OK, utilisateur récupéré](./screenshots/get_users_4_200.png)
+![GET /api/users/:id → récupérez l'utilisateur créé avec son id (code 200)](./screenshots/GET_id_200.png)
 
 ---
 
@@ -117,13 +117,13 @@ PUT http://localhost:3001/api/users/4
 Content-Type: application/json
 
 {
-  "role": "moderator"
+  "role": "admin"
 }
 ```
 
 **Résultat attendu :** Code `200 OK`, l'utilisateur est retourné avec le rôle mis à jour.
 
-> ℹ️ Pas de screenshot fourni pour cette étape.
+![PUT /api/users/:id → modifiez le rôle de l'utilisateur avec son id (code 200)](./screenshots/PUT_200.png)
 
 ---
 
@@ -136,7 +136,7 @@ GET http://localhost:3001/api/users
 
 **Résultat attendu :** Code `200 OK`, `"count": 4`.
 
-> ℹ️ Pas de screenshot fourni pour cette étape (même route que l'étape 1, mais avec `count: 4`).
+![GET /api/users → vérifiez que la liste contient maintenant 4 utilisateurs (code 200)](./screenshots/GET_with_new_200.png)
 
 ---
 
@@ -149,7 +149,7 @@ DELETE http://localhost:3001/api/users/4
 
 **Résultat attendu :** Code `204 No Content`, aucun corps de réponse.
 
-![DELETE /api/users/4 — 204 No Content](./screenshots/delete_users_4_204.png)
+![DELETE /api/users/:id → supprimez l'utilisateur créé (code 204)](./screenshots/DELETE_204.png)
 
 ---
 
@@ -162,7 +162,7 @@ GET http://localhost:3001/api/users/4
 
 **Résultat attendu :** Code `404 Not Found`, message d'erreur `"Utilisateur non trouvé"`.
 
-> ℹ️ Ce comportement est identique au test d'erreur sur l'ID 9999 (voir Tâche 3.2 ci-dessous).
+![GET /api/users/:id → tentez de récupérer l'utilisateur supprimé (code 404)](./screenshots/GET_id_404.png)
 
 ---
 
@@ -179,12 +179,14 @@ Ces tests vérifient que l'API gère correctement les situations anormales.
 POST http://localhost:3001/api/users
 Content-Type: application/json
 
-{}
+{
+  "role": "admin"
+}
 ```
 
 **Résultat attendu :** Code `400 Bad Request`.
 
-> ℹ️ Pas de screenshot fourni pour ce cas.
+![POST sans name ni email → doit retourner 400](./screenshots/POST_400.png)
 
 ---
 
@@ -197,7 +199,7 @@ GET http://localhost:3001/api/users/9999
 
 **Résultat attendu :** Code `404 Not Found`, `{ "success": false, "message": "Utilisateur non trouvé" }`.
 
-![GET /api/users/9999 — 404 Not Found](./screenshots/get_users_9999_404.png)
+![GET /api/users/9999 — 404 Not Found](./screenshots/GET_404.png)
 
 ---
 
@@ -213,7 +215,7 @@ Content-Type: application/json
 
 **Résultat attendu :** Code `404 Not Found`, `{ "success": false, "message": "Utilisateur non trouvé" }`.
 
-> ℹ️ Même comportement que GET /api/users/9999 — pas de screenshot fourni.
+![PUT /api/users/9999 → doit retourner 404](./screenshots/PUT_404.png)
 
 ---
 
@@ -226,8 +228,6 @@ DELETE http://localhost:3001/api/users/9999
 
 **Résultat attendu :** Code `404 Not Found`, `{ "success": false, "message": "Utilisateur non trouvé" }`.
 
-![DELETE /api/users/9999 — 404 Not Found](./screenshots/delete_users_9999_404.png)
+![DELETE /api/users/9999 → doit retourner 404](./screenshots/DELETE_404.png)
 
 ---
-
-*TP réalisé par Nicolas Carbo — 2026*
