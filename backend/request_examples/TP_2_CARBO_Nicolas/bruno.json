@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "TP_2_CARBO_Nicolas",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
