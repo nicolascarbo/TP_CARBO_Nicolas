@@ -4,6 +4,7 @@ import usersRouter from './routes/users.js'
 const app = express()
 const port = 3001
 
+app.use(express.json())
 app.use('/api/users', usersRouter)
 
 app.listen(port, () => {
