@@ -2,15 +2,22 @@ import mongoose from "mongoose";
 import userModel from "../models/userModel.js";
 
 export const getAllUsers = async (req, res) => {
-  const { role } = req.query;
-  const filter = role ? { role } : {};
-  const users = await userModel.find(filter);
+  try {
+    const { role } = req.query;
+    const filter = role ? { role } : {};
+    const users = await userModel.find(filter);
 
-  res.status(200).json({
-    success: true,
-    count: users.length,
-    data: users,
-  });
+    res.status(200).json({
+      success: true,
+      count: users.length,
+      data: users,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Erreur lors de la récupération des utilisateurs",
+    });
+  }
 };
 
 export const getUserById = async (req, res) => {
@@ -44,16 +51,16 @@ export const getUserById = async (req, res) => {
 };
 
 export const createUser = async (req, res) => {
-  const { name, email, role } = req.body;
-
-  if (!name || !email) {
-    return res.status(400).json({
-      success: false,
-      message: "Les champs name et email sont obligatoires",
-    });
-  }
-
   try {
+    const { name, email, role } = req.body;
+
+    if (!name || !email) {
+      return res.status(400).json({
+        success: false,
+        message: "Les champs name et email sont obligatoires",
+      });
+    }
+
     const newUser = await userModel.create({ name, email, role });
 
     res.status(201).json({
@@ -67,7 +74,7 @@ export const createUser = async (req, res) => {
         message: "Cet email est déjà utilisé",
       });
     }
-    
+
     res.status(500).json({
       success: false,
       message: "Erreur lors de la création de l'utilisateur",
@@ -76,18 +83,18 @@ export const createUser = async (req, res) => {
 };
 
 export const updateUser = async (req, res) => {
-  const { id } = req.params;
-
-  if (!mongoose.isValidObjectId(id)) {
-    return res.status(400).json({
-      success: false,
-      message: "ID invalide",
-    });
-  }
-
-  const { _id, createdAt, ...allowedUpdates } = req.body;
-
   try {
+    const { id } = req.params;
+
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "ID invalide",
+      });
+    }
+
+    const { _id, createdAt, ...allowedUpdates } = req.body;
+
     const updatedUser = await userModel.findByIdAndUpdate(id, allowedUpdates, {
       new: true,
       runValidators: true,
@@ -119,15 +126,29 @@ export const updateUser = async (req, res) => {
   }
 };
 
-export const deleteUser = (req, res) => {
-  const success = userModel.remove(req.params.id);
+export const deleteUser = async (req, res) => {
+  try {
+    if (!mongoose.isValidObjectId(req.params.id)) {
+      return res.status(400).json({
+        success: false,
+        message: "ID invalide",
+      });
+    }
 
-  if (!success) {
-    return res.status(404).json({
+    const deletedUser = await userModel.findByIdAndDelete(req.params.id);
+
+    if (!deletedUser) {
+      return res.status(404).json({
+        success: false,
+        message: "Utilisateur non trouvé",
+      });
+    }
+
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).json({
       success: false,
-      message: "Utilisateur non trouvé",
+      message: "Erreur lors de la suppression de l'utilisateur",
     });
   }
-
-  res.status(204).send();
 };
