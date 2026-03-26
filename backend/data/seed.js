@@ -1,7 +1,7 @@
-import 'dotenv/config';
-import mongoose from 'mongoose';
-import { connectDB } from '../config/db.js';
-import User from '../models/userModel.js';
+import "dotenv/config";
+import mongoose from "mongoose";
+import { connectDB } from "../config/db.js";
+import User from "../models/userModel.js";
 
 const seedData = async () => {
   try {
@@ -12,30 +12,32 @@ const seedData = async () => {
     if (count === 0) {
       await User.insertMany([
         {
-          name: 'Alice Martin',
-          email: 'alice@example.com',
-          role: 'admin'
+          name: "Alice Martin",
+          email: "alice@example.com",
+          role: "admin",
         },
         {
-          name: 'Bob Dupont',
-          email: 'bob@example.com',
-          role: 'user'
+          name: "Bob Dupont",
+          email: "bob@example.com",
+          role: "user",
         },
         {
-          name: 'Charlie Durand',
-          email: 'charlie@example.com',
-          role: 'user'
-        }
+          name: "Charlie Durand",
+          email: "charlie@example.com",
+          role: "user",
+        },
       ]);
-      console.log('3 utilisateurs insérés avec succès !');
+      console.log("3 utilisateurs insérés avec succès !");
     } else {
-      console.log('La collection contient déjà des utilisateurs. Aucune insertion effectuée.');
+      console.log(
+        "La collection contient déjà des utilisateurs. Aucune insertion effectuée.",
+      );
     }
   } catch (error) {
     console.error(`Erreur lors du seeding: ${error.message}`);
   } finally {
     await mongoose.connection.close();
-    console.log('Connexion MongoDB fermée correctement.');
+    console.log("Connexion MongoDB fermée correctement.");
     process.exit(0);
   }
 };
