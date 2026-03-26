@@ -39,5 +39,5 @@ const seedData = async () => {
     process.exit(0);
   }
 };
-
+//tu en es a la partie 3, la partie 2 ok
 seedData();

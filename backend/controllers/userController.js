@@ -1,8 +1,9 @@
-import * as userModel from '../models/userModel.js'
+import userModel from '../models/userModel.js'
 
-export const getAllUsers = (req, res) => {
+export const getAllUsers = async (req, res) => {
   const { role } = req.query
-  const users = userModel.getAll(role)
+  const filter = role ? { role } : {}
+  const users = await userModel.find(filter)
 
   res.status(200).json({
     success: true,
