@@ -75,30 +75,48 @@ export const createUser = async (req, res) => {
   }
 };
 
-export const updateUser = (req, res) => {
-  const id = req.params.id;
-  const { id: bodyId, createdAt, ...allowedUpdates } = req.body;
+export const updateUser = async (req, res) => {
+  const { id } = req.params;
 
-  if (allowedUpdates.email && userModel.findByEmail(allowedUpdates.email, id)) {
-    return res.status(409).json({
+  if (!mongoose.isValidObjectId(id)) {
+    return res.status(400).json({
       success: false,
-      message: "Cet email est déjà utilisé",
+      message: "ID invalide",
     });
   }
 
-  const updatedUser = userModel.update(id, allowedUpdates);
+  const { _id, createdAt, ...allowedUpdates } = req.body;
 
-  if (!updatedUser) {
-    return res.status(404).json({
+  try {
+    const updatedUser = await userModel.findByIdAndUpdate(id, allowedUpdates, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        message: "Utilisateur non trouvé",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: updatedUser,
+    });
+  } catch (error) {
+    if (error.code === 11000) {
+      return res.status(409).json({
+        success: false,
+        message: "Cet email est déjà utilisé",
+      });
+    }
+
+    res.status(500).json({
       success: false,
-      message: "Utilisateur non trouvé",
+      message: "Erreur lors de la mise à jour de l'utilisateur",
     });
   }
-
-  res.status(200).json({
-    success: true,
-    data: updatedUser,
-  });
 };
 
 export const deleteUser = (req, res) => {
