@@ -8,11 +8,11 @@ L'API expose les opérations **CRUD** (Create, Read, Update, Delete) sur la ress
 
 ### Stack technique
 
-| Outil | Rôle |
-|---|---|
-| **Node.js** | Environnement d'exécution JavaScript côté serveur |
-| **Express 5** | Framework HTTP pour créer les routes REST |
-| **ES Modules** | Syntaxe `import/export` native |
+| Outil          | Rôle                                              |
+| -------------- | ------------------------------------------------- |
+| **Node.js**    | Environnement d'exécution JavaScript côté serveur |
+| **Express 5**  | Framework HTTP pour créer les routes REST         |
+| **ES Modules** | Syntaxe `import/export` native                    |
 
 ### Lancer le serveur
 
@@ -40,21 +40,21 @@ backend/
 
 ## Endpoints disponibles
 
-| Méthode | Route | Description | Code succès |
-|---|---|---|---|
-| `GET` | `/api/users` | Récupérer tous les utilisateurs | 200 |
-| `GET` | `/api/users/:id` | Récupérer un utilisateur par ID | 200 |
-| `POST` | `/api/users` | Créer un nouvel utilisateur | 201 |
-| `PUT` | `/api/users/:id` | Modifier un utilisateur | 200 |
-| `DELETE` | `/api/users/:id` | Supprimer un utilisateur | 204 |
+| Méthode  | Route            | Description                     | Code succès |
+| -------- | ---------------- | ------------------------------- | ----------- |
+| `GET`    | `/api/users`     | Récupérer tous les utilisateurs | 200         |
+| `GET`    | `/api/users/:id` | Récupérer un utilisateur par ID | 200         |
+| `POST`   | `/api/users`     | Créer un nouvel utilisateur     | 201         |
+| `PUT`    | `/api/users/:id` | Modifier un utilisateur         | 200         |
+| `DELETE` | `/api/users/:id` | Supprimer un utilisateur        | 204         |
 
 ### Codes d'erreur
 
-| Code | Signification |
-|---|---|
-| `400 Bad Request` | Données invalides (ex : `name` ou `email` manquant) |
-| `404 Not Found` | Ressource introuvable (ID inexistant) |
-| `500 Internal Server Error` | Bug côté serveur |
+| Code                        | Signification                                       |
+| --------------------------- | --------------------------------------------------- |
+| `400 Bad Request`           | Données invalides (ex : `name` ou `email` manquant) |
+| `404 Not Found`             | Ressource introuvable (ID inexistant)               |
+| `500 Internal Server Error` | Bug côté serveur                                    |
 
 ---
 
@@ -67,6 +67,7 @@ Les tests suivants doivent être exécutés **dans l'ordre**. Chaque étape s'ap
 ### Étape 1 — `GET /api/users` · Vérifier les 3 utilisateurs initiaux
 
 **Requête :**
+
 ```
 GET http://localhost:3001/api/users
 ```
@@ -80,6 +81,7 @@ GET http://localhost:3001/api/users
 ### Étape 2 — `POST /api/users` · Créer un nouvel utilisateur
 
 **Requête :**
+
 ```
 POST http://localhost:3001/api/users
 Content-Type: application/json
@@ -100,6 +102,7 @@ Content-Type: application/json
 ### Étape 3 — `GET /api/users/:id` · Récupérer l'utilisateur créé
 
 **Requête :**
+
 ```
 GET http://localhost:3001/api/users/4
 ```
@@ -113,6 +116,7 @@ GET http://localhost:3001/api/users/4
 ### Étape 4 — `PUT /api/users/:id` · Modifier le rôle de l'utilisateur
 
 **Requête :**
+
 ```
 PUT http://localhost:3001/api/users/4
 Content-Type: application/json
@@ -131,6 +135,7 @@ Content-Type: application/json
 ### Étape 5 — `GET /api/users` · Vérifier que la liste contient 4 utilisateurs
 
 **Requête :**
+
 ```
 GET http://localhost:3001/api/users
 ```
@@ -144,6 +149,7 @@ GET http://localhost:3001/api/users
 ### Étape 6 — `DELETE /api/users/:id` · Supprimer l'utilisateur créé
 
 **Requête :**
+
 ```
 DELETE http://localhost:3001/api/users/4
 ```
@@ -157,6 +163,7 @@ DELETE http://localhost:3001/api/users/4
 ### Étape 7 — `GET /api/users/:id` · Tenter de récupérer l'utilisateur supprimé
 
 **Requête :**
+
 ```
 GET http://localhost:3001/api/users/4
 ```
@@ -176,6 +183,7 @@ Ces tests vérifient que l'API gère correctement les situations anormales.
 ### `POST` sans `name` ni `email` → doit retourner `400`
 
 **Requête :**
+
 ```
 POST http://localhost:3001/api/users
 Content-Type: application/json
@@ -194,6 +202,7 @@ Content-Type: application/json
 ### `GET /api/users/9999` → doit retourner `404`
 
 **Requête :**
+
 ```
 GET http://localhost:3001/api/users/9999
 ```
@@ -207,6 +216,7 @@ GET http://localhost:3001/api/users/9999
 ### `PUT /api/users/9999` → doit retourner `404`
 
 **Requête :**
+
 ```
 PUT http://localhost:3001/api/users/9999
 Content-Type: application/json
@@ -223,6 +233,7 @@ Content-Type: application/json
 ### `DELETE /api/users/9999` → doit retourner `404`
 
 **Requête :**
+
 ```
 DELETE http://localhost:3001/api/users/9999
 ```
