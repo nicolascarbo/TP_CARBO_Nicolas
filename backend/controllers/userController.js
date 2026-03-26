@@ -43,7 +43,7 @@ export const getUserById = async (req, res) => {
   }
 };
 
-export const createUser = (req, res) => {
+export const createUser = async (req, res) => {
   const { name, email, role } = req.body;
 
   if (!name || !email) {
@@ -53,19 +53,26 @@ export const createUser = (req, res) => {
     });
   }
 
-  if (userModel.findByEmail(email)) {
-    return res.status(409).json({
+  try {
+    const newUser = await userModel.create({ name, email, role });
+
+    res.status(201).json({
+      success: true,
+      data: newUser,
+    });
+  } catch (error) {
+    if (error.code === 11000) {
+      return res.status(409).json({
+        success: false,
+        message: "Cet email est déjà utilisé",
+      });
+    }
+    
+    res.status(500).json({
       success: false,
-      message: "Cet email est déjà utilisé",
+      message: "Erreur lors de la création de l'utilisateur",
     });
   }
-
-  const newUser = userModel.create({ name, email, role });
-
-  res.status(201).json({
-    success: true,
-    data: newUser,
-  });
 };
 
 export const updateUser = (req, res) => {
