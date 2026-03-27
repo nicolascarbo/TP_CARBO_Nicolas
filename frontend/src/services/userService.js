@@ -1,15 +1,15 @@
-import axios from 'axios';
+import axios from "axios";
 
 const api = axios.create({
-  baseURL: '/api/users', 
+  baseURL: "/api/users",
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
 const userService = {
   getAll: (params) => {
-    return api.get('/', { params });
+    return api.get("/", { params });
   },
 
   getById: (id) => {
@@ -17,7 +17,7 @@ const userService = {
   },
 
   create: (data) => {
-    return api.post('/', data);
+    return api.post("/", data);
   },
 
   update: (id, data) => {
@@ -26,7 +26,7 @@ const userService = {
 
   remove: (id) => {
     return api.delete(`/${id}`);
-  }
+  },
 };
 
 export default userService;

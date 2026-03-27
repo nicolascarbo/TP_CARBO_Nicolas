@@ -1,20 +1,21 @@
-import UserCard from '../UserCard/UserCard'; 
-import './UserList.css';
+import UserCard from "../UserCard/UserCard";
+import "./UserList.css";
 
-const UserList = ({ users, loading, error, onDelete, onEdit }) => { 
+const UserList = ({ users, loading, error, onDelete, onEdit, filterRole }) => {
   if (loading) return <div className="loader">Chargement...</div>;
   if (error) return <div className="error-message">Erreur : {error}</div>;
-  if (users.length === 0) return <div className="status-message">Aucun utilisateur</div>;
+  if (users.length === 0)
+    return <div className="status-message">Aucun utilisateur</div>;
 
   return (
     <div className="user-list-container">
       <div className="user-grid">
         {users.map((user) => (
-          <UserCard 
-            key={user._id} 
-            user={user} 
-            onDelete={onDelete} 
-            onEdit={onEdit} 
+          <UserCard
+            key={`${filterRole}-${user._id}`}
+            user={user}
+            onDelete={onDelete}
+            onEdit={onEdit}
           />
         ))}
       </div>
