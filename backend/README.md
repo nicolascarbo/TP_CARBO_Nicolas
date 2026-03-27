@@ -1,4 +1,4 @@
-# TP 2 — API REST · Nicolas Carbo
+# TP 2 — API REST 
 
 ## Contexte du projet
 
@@ -255,7 +255,7 @@ Ce scénario suit le cycle de vie standard d'une ressource utilisateur, de sa cr
 
 | Étape | Méthode | Route | Résultat attendu | Capture d'écran |
 | :--- | :---: | :--- | :--- | :--- |
-| **1** | `GET` | `/api/users` | Liste initiale (3 users via seed) | ![GET All Initial](./screenshots/get_3_200.png) |
+| **1** | `GET` | `/api/users` | Liste initiale (3 users via seed) | ![GET All Initial](./screenshots/get_200.png) |
 | **2** | `POST` | `/api/users` | Création réussie (Code 201 + `_id`) | ![POST User](./screenshots/post_200.png) |
 | **3** | `GET` | `/api/users/:id` | Récupération par ID (Nom conforme) | ![GET By ID](./screenshots/get_id_200.png) |
 | **4** | `PUT` | `/api/users/:id` | Modification du champ (Code 200) | ![PUT User](./screenshots/put_200.png) |
