@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 import userModel from "../models/userModel.js";
 
-export const getAllUsers = async (req, res, next) => { // Ajout de next ici
+export const getAllUsers = async (req, res, next) => {
+  // Ajout de next ici
   try {
     const { role, page = 1, limit = 10, search } = req.query;
     const pageNum = parseInt(page, 10);
@@ -10,11 +11,11 @@ export const getAllUsers = async (req, res, next) => { // Ajout de next ici
 
     const filter = {};
     if (role) filter.role = role;
-    if (search) filter.name = { $regex: new RegExp(search, 'i') };
+    if (search) filter.name = { $regex: new RegExp(search, "i") };
 
     const [users, totalCount] = await Promise.all([
       userModel.find(filter).skip(skip).limit(limitNum),
-      userModel.countDocuments(filter)
+      userModel.countDocuments(filter),
     ]);
 
     res.status(200).json({
@@ -26,7 +27,7 @@ export const getAllUsers = async (req, res, next) => { // Ajout de next ici
       data: users,
     });
   } catch (error) {
-    next(error); 
+    next(error);
   }
 };
 
