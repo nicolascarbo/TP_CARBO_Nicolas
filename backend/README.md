@@ -302,3 +302,22 @@ Ce test valide l'objectif principal : la sauvegarde réelle des données dans Mo
    * ![Étape 3 - Données persistées](./screenshots/test_persistence_3.png)
 
 ---
+
+## 5. Tests et Validation du Frontend (React)
+
+Cette section documente les tests fonctionnels de l'interface utilisateur et son intégration avec l'API Backend.
+
+### 5.1 — Scénarios de test de l'interface
+Chaque test valide une fonctionnalité clé du client React et sa communication avec le service Axios.
+
+| Étape | Action | Résultat attendu | Capture d'écran |
+| :--- | :--- | :--- | :--- |
+| **1** | Lancer le frontend (`npm run dev`) | La liste des utilisateurs s'affiche (Données Séance 3) | ![Initial Load](./screenshots/tp4partie4/1.png) |
+| **2** | Soumettre le formulaire valide | Nouvel utilisateur ajouté à la liste sans rechargement | ![Form Success](./screenshots/tp4partie4/2.png) |
+| **3** | Cliquer sur "Supprimer" | L'utilisateur disparaît de la liste immédiatement | ![Delete Success](./screenshots/tp4partie4/3.png) |
+| **4** | Soumettre avec un champ vide | Message d'erreur affiché, aucun appel API effectué | ![Validation Error](./screenshots/tp4partie4/4.png) |
+| **5** | Soumettre un email existant | Erreur 409 de l'API affichée dans l'interface | ![API Error 409](./screenshots/tp4partie4/5.png) |
+| **6** | Couper l'API Backend (`Ctrl+C`) | Message d'erreur de connexion affiché (pas de crash) | ![API Down](./screenshots/tp4partie4/6.png) |
+| **7** | Redémarrer l'API et recharger | Les données sont persistantes (MongoDB) | ![Persistence Check](./screenshots/tp4partie4/7.png) |
+
+---
