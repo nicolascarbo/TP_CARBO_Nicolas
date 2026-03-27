@@ -1,6 +1,6 @@
 import './UserCard.css';
 
-const UserCard = ({ user, onDelete }) => {
+const UserCard = ({ user, onDelete, onEdit }) => {
   const formatDate = (dateString) => {
     if (!dateString) return "Date inconnue";
     const date = new Date(dateString);
@@ -25,13 +25,32 @@ const UserCard = ({ user, onDelete }) => {
 
       <div className="user-card-footer">
         <p className="user-date">Membre depuis le : {formatDate(user.createdAt)}</p>
-        <button 
-          type="button"
-          className="delete-btn" 
-          onClick={() => onDelete(user._id)}
-        >
-          Supprimer
-        </button>
+        <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
+          <button 
+            type="button"
+            className="edit-btn"
+            onClick={() => onEdit(user)}
+            style={{ 
+              flex: 1, 
+              padding: '8px', 
+              cursor: 'pointer', 
+              backgroundColor: '#3498db', 
+              color: 'white', 
+              border: 'none', 
+              borderRadius: '4px' 
+            }}
+          >
+            Modifier
+          </button>
+          <button 
+            type="button"
+            className="delete-btn" 
+            onClick={() => onDelete(user._id)}
+            style={{ flex: 1 }}
+          >
+            Supprimer
+          </button>
+        </div>
       </div>
     </div>
   );

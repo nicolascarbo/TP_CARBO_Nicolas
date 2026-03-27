@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import './UserForm.css';
 
-const UserForm = ({ onSubmit }) => {
+const UserForm = ({ onSubmit, initialData }) => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    role: 'user'
+    name: initialData?.name || '',
+    email: initialData?.email || '',
+    role: initialData?.role || 'user'
   });
   const [error, setError] = useState('');
 
@@ -19,7 +19,7 @@ const UserForm = ({ onSubmit }) => {
     setError('');
 
     if (!formData.name || !formData.email) {
-      setError('Veuillez remplir les champs obligatoires (Nom et Email).');
+      setError('Veuillez remplir les champs obligatoires.');
       return;
     }
 
@@ -27,13 +27,13 @@ const UserForm = ({ onSubmit }) => {
       await onSubmit(formData);
       setFormData({ name: '', email: '', role: 'user' });
     } catch (err) {
-      setError('Une erreur est survenue lors de la création.', err);
+      setError(err.response?.data?.message || 'Une erreur est survenue.');
     }
   };
 
   return (
     <div className="user-form-container">
-      <h3>Ajouter un utilisateur</h3>
+      <h3>{initialData ? 'Modifier l\'utilisateur' : 'Ajouter un utilisateur'}</h3>
       {error && <div className="error-alert">{error}</div>}
       
       <form className="user-form" onSubmit={handleSubmit}>
@@ -63,19 +63,14 @@ const UserForm = ({ onSubmit }) => {
 
         <div className="form-group">
           <label htmlFor="role">Rôle</label>
-          <select
-            id="role"
-            name="role"
-            value={formData.role}
-            onChange={handleChange}
-          >
+          <select id="role" name="role" value={formData.role} onChange={handleChange}>
             <option value="user">Utilisateur</option>
             <option value="admin">Administrateur</option>
           </select>
         </div>
 
         <button type="submit" className="submit-btn">
-          Créer l'utilisateur
+          {initialData ? 'Mettre à jour' : 'Créer l\'utilisateur'}
         </button>
       </form>
     </div>
