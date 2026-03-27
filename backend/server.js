@@ -1,8 +1,8 @@
 import "dotenv/config";
 import express from "express";
-import usersRouter from "./routes/users.js";
-import loggerMiddleware from "./middleware/logger.js";
 import { connectDB } from "./config/db.js";
+import loggerMiddleware from "./middleware/logger.js";
+import usersRouter from "./routes/users.js";
 
 const app = express();
 const port = process.env.PORT || 3001;

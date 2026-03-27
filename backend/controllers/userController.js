@@ -1,26 +1,36 @@
 import mongoose from "mongoose";
 import userModel from "../models/userModel.js";
 
-export const getAllUsers = async (req, res) => {
+export const getAllUsers = async (req, res, next) => { // Ajout de next ici
   try {
-    const { role } = req.query;
-    const filter = role ? { role } : {};
-    const users = await userModel.find(filter);
+    const { role, page = 1, limit = 10, search } = req.query;
+    const pageNum = parseInt(page, 10);
+    const limitNum = parseInt(limit, 10);
+    const skip = (pageNum - 1) * limitNum;
+
+    const filter = {};
+    if (role) filter.role = role;
+    if (search) filter.name = { $regex: new RegExp(search, 'i') };
+
+    const [users, totalCount] = await Promise.all([
+      userModel.find(filter).skip(skip).limit(limitNum),
+      userModel.countDocuments(filter)
+    ]);
 
     res.status(200).json({
       success: true,
-      count: users.length,
+      page: pageNum,
+      limit: limitNum,
+      totalCount,
+      totalPages: Math.ceil(totalCount / limitNum),
       data: users,
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Erreur lors de la récupération des utilisateurs",
-    });
+    next(error); 
   }
 };
 
-export const getUserById = async (req, res) => {
+export const getUserById = async (req, res, next) => {
   try {
     if (!mongoose.isValidObjectId(req.params.id)) {
       return res.status(400).json({
@@ -43,14 +53,11 @@ export const getUserById = async (req, res) => {
       data: user,
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Erreur lors de la récupération de l'utilisateur",
-    });
+    next(error);
   }
 };
 
-export const createUser = async (req, res) => {
+export const createUser = async (req, res, next) => {
   try {
     const { name, email, role } = req.body;
 
@@ -75,14 +82,11 @@ export const createUser = async (req, res) => {
       });
     }
 
-    res.status(500).json({
-      success: false,
-      message: "Erreur lors de la création de l'utilisateur",
-    });
+    next(error);
   }
 };
 
-export const updateUser = async (req, res) => {
+export const updateUser = async (req, res, next) => {
   try {
     const { id } = req.params;
 
@@ -119,14 +123,11 @@ export const updateUser = async (req, res) => {
       });
     }
 
-    res.status(500).json({
-      success: false,
-      message: "Erreur lors de la mise à jour de l'utilisateur",
-    });
+    next(error);
   }
 };
 
-export const deleteUser = async (req, res) => {
+export const deleteUser = async (req, res, next) => {
   try {
     if (!mongoose.isValidObjectId(req.params.id)) {
       return res.status(400).json({
@@ -146,9 +147,6 @@ export const deleteUser = async (req, res) => {
 
     res.status(204).send();
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Erreur lors de la suppression de l'utilisateur",
-    });
+    next(error);
   }
 };
