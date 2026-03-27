@@ -243,3 +243,62 @@ DELETE http://localhost:3001/api/users/9999
 ![DELETE /api/users/9999 → doit retourner 404](./screenshots/DELETE_404.png)
 
 ---
+
+## 4. Tests et Validation des API
+
+Cette section détaille les tests fonctionnels réalisés pour valider les routes de l'API ainsi que la robustesse de la gestion des erreurs avec MongoDB.
+
+---
+
+### 4.1 — Scénario de test complet (Happy Path)
+Ce scénario suit le cycle de vie standard d'une ressource utilisateur, de sa création à sa suppression.
+
+| Étape | Méthode | Route | Résultat attendu | Capture d'écran |
+| :--- | :---: | :--- | :--- | :--- |
+| **1** | `GET` | `/api/users` | Liste initiale (3 users via seed) | ![GET All Initial](./screenshots/get_3_200.png) |
+| **2** | `POST` | `/api/users` | Création réussie (Code 201 + `_id`) | ![POST User](./screenshots/post_200.png) |
+| **3** | `GET` | `/api/users/:id` | Récupération par ID (Nom conforme) | ![GET By ID](./screenshots/get_id_200.png) |
+| **4** | `PUT` | `/api/users/:id` | Modification du champ (Code 200) | ![PUT User](./screenshots/put_200.png) |
+| **5** | `GET` | `/api/users` | Vérification du compte (count: 4) | ![GET All Final](./screenshots/get_4_200.png) |
+| **6** | `DELETE`| `/api/users/:id` | Suppression réussie (Code 204) | ![DELETE User](./screenshots/delete_200.png) |
+| **7** | `GET` | `/api/users/:id` | Vérification finale (Code 404) | ![GET 404 After Delete](./screenshots/get_id_404.png) |
+
+---
+
+### 4.2 — Tests des cas d'erreur MongoDB
+Validation des mécanismes de sécurité et de gestion d'erreurs du serveur.
+
+#### ❌ Conflit d'email (Doublon)
+* **Action :** `POST` avec un email déjà existant en base de données.
+* **Attendu :** Code `409 Conflict`.
+* ![Erreur 409 - Email existant](./screenshots/post_409.png)
+
+#### ❌ Format d'ID invalide
+* **Action :** `GET` avec un ID malformé (ex: `123`).
+* **Attendu :** Code `400 Bad Request` (ObjectId invalide).
+* ![Erreur 400 - ID Invalide](./screenshots/get_id_400.png)
+
+#### ❌ ID Introuvable
+* **Action :** `GET` avec un ID au format valide mais inexistant (`000000000000000000000000`).
+* **Attendu :** Code `404 Not Found`.
+* ![Erreur 404 - ID Inexistant](./screenshots/get_id_404_2.png)
+
+---
+
+### 4.3 — Test de persistance ⭐
+Ce test valide l'objectif principal : la sauvegarde réelle des données dans MongoDB.
+
+1. **Étape 1 : Création de l'utilisateur**
+   * Exécution d'un `POST` et récupération de l'_id généré.
+   * ![Étape 1 - Création](./screenshots/test_persistence_1.png)
+
+2. **Étape 2 : Redémarrage du serveur**
+   * Arrêt manuel (`Ctrl+C`) et relance avec `node server.js`.
+   * ![Étape 2 - Redémarrage serveur](./screenshots/test_persistence_2.png)
+
+3. **Étape 3 : Vérification de la persistance**
+   * Requête `GET /api/users/:id` avec l'ID précédemment créé.
+   * **Résultat attendu :** L'utilisateur est toujours récupéré avec succès.
+   * ![Étape 3 - Données persistées](./screenshots/test_persistence_3.png)
+
+---
