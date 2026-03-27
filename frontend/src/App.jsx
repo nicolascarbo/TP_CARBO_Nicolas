@@ -1,21 +1,24 @@
 import { useCallback, useEffect, useState } from "react";
 import Navbar from "./components/Navbar/Navbar";
+import UserList from "./components/UserList/UserList";
 import userService from "./services/userService";
-import UserCard from "./components/UserCard/UserCard";
+
 
 const App = () => {
   const [users, setUsers] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const fetchUsers = useCallback(async () => {
     try {
       setLoading(true);
+      setError(null);
       const response = await userService.getAll();
       setUsers(response.data.data);
       setTotalCount(response.data.totalCount);
-    } catch (error) {
-      console.error("Erreur lors de la récupération :", error);
+    } catch (err) {
+      setError(err.response?.data?.message || err.message);
     } finally {
       setLoading(false);
     }
@@ -27,8 +30,8 @@ const App = () => {
         await userService.remove(userId);
         setUsers(users.filter((user) => user._id !== userId));
         setTotalCount((prev) => prev - 1);
-      } catch (error) {
-        console.error(error);
+      } catch (err) {
+        alert("Erreur lors de la suppression", err);
       }
     }
   };
@@ -38,24 +41,16 @@ const App = () => {
   }, [fetchUsers]);
 
   return (
-    <div>
+    <div className="app-container">
       <Navbar count={totalCount} />
-      <main style={{ padding: "2rem" }}>
-        {loading ? (
-          <p>Chargement...</p>
-        ) : (
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-              gap: "1.5rem",
-            }}
-          >
-            {users.map((user) => (
-              <UserCard key={user._id} user={user} onDelete={handleDelete} />
-            ))}
-          </div>
-        )}
+
+      <main style={{ padding: "0 2rem" }}>
+        <UserList
+          users={users}
+          loading={loading}
+          error={error}
+          onDelete={handleDelete}
+        />
       </main>
     </div>
   );
