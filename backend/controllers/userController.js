@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import userModel from "../models/userModel.js";
 
 export const getAllUsers = async (req, res, next) => {
-  // Ajout de next ici
   try {
     const { role, page = 1, limit = 10, search } = req.query;
     const pageNum = parseInt(page, 10);
@@ -15,7 +14,7 @@ export const getAllUsers = async (req, res, next) => {
 
     const [users, totalCount] = await Promise.all([
       userModel.find(filter).skip(skip).limit(limitNum),
-      userModel.countDocuments(filter),
+      userModel.countDocuments(filter)
     ]);
 
     res.status(200).json({
